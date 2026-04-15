@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PM MVP Hello World</title>
+    <style>
+      :root {
+        --accent-yellow: #ecad0a;
+        --primary-blue: #209dd7;
+        --secondary-purple: #753991;
+        --navy-dark: #032147;
+        --gray-text: #888888;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Segoe UI", sans-serif;
+        color: var(--navy-dark);
+        background: #f8fbff;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+      }
+
+      main {
+        width: min(720px, 100%);
+        background: white;
+        border: 1px solid rgba(3, 33, 71, 0.1);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 16px 30px rgba(3, 33, 71, 0.08);
+      }
+
+      h1 {
+        margin-top: 0;
+      }
+
+      button {
+        background: var(--secondary-purple);
+        color: white;
+        border: 0;
+        border-radius: 999px;
+        padding: 10px 16px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      pre {
+        margin-top: 16px;
+        background: #f5f7fb;
+        border-radius: 10px;
+        padding: 12px;
+        overflow-x: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p>Hello world from FastAPI static HTML.</p>
+      <h1>Project Management MVP</h1>
+      <p>
+        This page is served by the backend. Click below to call the API health
+        endpoint.
+      </p>
+      <button id="health-btn" type="button">Call /api/health</button>
+      <pre id="output">Waiting for API call...</pre>
+    </main>
+    <script>
+      const output = document.getElementById("output");
+      const button = document.getElementById("health-btn");
+
+      async function callHealth() {
+        output.textContent = "Loading...";
+        try {
+          const response = await fetch("/api/health");
+          const payload = await response.json();
+          output.textContent = JSON.stringify(payload, null, 2);
+        } catch (error) {
+          output.textContent = `Request failed: ${error}`;
+        }
+      }
+
+      button.addEventListener("click", callHealth);
+    </script>
+  </body>
+</html>
