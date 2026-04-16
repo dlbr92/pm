@@ -70,7 +70,7 @@ def ai_diagnostic(ai_service: AIService = Depends(get_ai_service)) -> dict[str, 
     return {
         "prompt": AI_DIAGNOSTIC_PROMPT,
         "response": response_text,
-        "model": ai_service.model,
+        "model": getattr(ai_service, "last_used_model", ai_service.model),
     }
 
 

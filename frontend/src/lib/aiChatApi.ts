@@ -26,7 +26,16 @@ export const sendAIChat = async (
   });
 
   if (!response.ok) {
-    throw new Error(`AI chat request failed with status ${response.status}.`);
+    let detail = `AI chat request failed with status ${response.status}.`;
+    try {
+      const payload = (await response.json()) as { detail?: string };
+      if (payload.detail) {
+        detail = payload.detail;
+      }
+    } catch {
+      // ignore body parse errors and keep fallback message
+    }
+    throw new Error(detail);
   }
 
   return (await response.json()) as AIChatResponse;

@@ -98,8 +98,12 @@ export default function Home() {
         { role: "assistant", content: response.reply },
       ]);
       setBoard(response.board);
-    } catch {
-      setChatError("Unable to get AI response right now.");
+    } catch (error) {
+      if (error instanceof Error) {
+        setChatError(error.message);
+      } else {
+        setChatError("Unable to get AI response right now.");
+      }
     } finally {
       setIsChatLoading(false);
     }
