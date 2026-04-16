@@ -1,4 +1,35 @@
 import { expect, test, type Page } from "@playwright/test";
+import { initialData, type BoardData } from "../src/lib/kanban";
+
+const cloneBoard = (): BoardData => JSON.parse(JSON.stringify(initialData));
+
+const mockBoardApi = async (page: Page) => {
+  let board = cloneBoard();
+  await page.route("**/api/board", async (route) => {
+    const request = route.request();
+    if (request.method() === "GET") {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify(board),
+      });
+      return;
+    }
+
+    if (request.method() === "PUT") {
+      const payload = request.postDataJSON() as BoardData;
+      board = payload;
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify(board),
+      });
+      return;
+    }
+
+    await route.fulfill({ status: 405 });
+  });
+};
 
 const login = async (page: Page) => {
   await page.getByLabel("Username").fill("user");
@@ -7,6 +38,7 @@ const login = async (page: Page) => {
 };
 
 test("loads the kanban board", async ({ page }) => {
+  await mockBoardApi(page);
   await page.goto("/");
   await expect(page.getByRole("heading", { name: /sign in/i })).toBeVisible();
   await login(page);
@@ -15,6 +47,7 @@ test("loads the kanban board", async ({ page }) => {
 });
 
 test("adds a card to a column", async ({ page }) => {
+  await mockBoardApi(page);
   await page.goto("/");
   await login(page);
   const firstColumn = page.locator('[data-testid^="column-"]').first();
@@ -25,7 +58,29 @@ test("adds a card to a column", async ({ page }) => {
   await expect(firstColumn.getByText("Playwright card")).toBeVisible();
 });
 
+test("retains board changes after refresh", async ({ page }) => {
+  await mockBoardApi(page);
+  await page.goto("/");
+  await login(page);
+  const firstColumn = page.locator('[data-testid^="column-"]').first();
+  const uniqueTitle = `Persist card ${Date.now()}`;
+
+  await firstColumn.getByRole("button", { name: /add a card/i }).click();
+  await firstColumn.getByPlaceholder("Card title").fill(uniqueTitle);
+  await firstColumn.getByPlaceholder("Details").fill("Persistence smoke test.");
+  await firstColumn.getByRole("button", { name: /add card/i }).click();
+  await expect(firstColumn.getByText(uniqueTitle)).toBeVisible();
+
+  await page.reload();
+  const signInHeading = page.getByRole("heading", { name: /sign in/i });
+  if (await signInHeading.isVisible()) {
+    await login(page);
+  }
+  await expect(page.locator('[data-testid^="column-"]').first().getByText(uniqueTitle)).toBeVisible();
+});
+
 test("moves a card between columns", async ({ page }) => {
+  await mockBoardApi(page);
   await page.goto("/");
   await login(page);
   const card = page.getByTestId("card-card-1");
@@ -51,6 +106,7 @@ test("moves a card between columns", async ({ page }) => {
 });
 
 test("requires login before board is visible", async ({ page }) => {
+  await mockBoardApi(page);
   await page.goto("/");
   await expect(page.getByRole("heading", { name: /sign in/i })).toBeVisible();
   await expect(

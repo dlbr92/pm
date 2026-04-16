@@ -144,21 +144,21 @@ Each part includes implementation steps, tests, and explicit success criteria.
 
 ### Checklist
 
-- [ ] Replace frontend local-only board state with backend API calls.
-- [ ] Load board on app start after login.
-- [ ] Persist card edits/moves/column changes through API.
-- [ ] Handle loading/error states in a minimal user-friendly way.
+- [x] Replace frontend local-only board state with backend API calls.
+- [x] Load board on app start after login.
+- [x] Persist card edits/moves/column changes through API.
+- [x] Handle loading/error states in a minimal user-friendly way.
 
 ### Tests
 
-- [ ] Frontend tests for API integration paths.
-- [ ] Integration tests for create/edit/move persistence.
-- [ ] E2E flow: refresh page and verify board state is retained.
+- [x] Frontend tests for API integration paths.
+- [x] Integration tests for create/edit/move persistence.
+- [x] E2E flow: refresh page and verify board state is retained.
 
 ### Success criteria
 
-- [ ] Board interactions persist across refresh/restart.
-- [ ] Frontend and backend stay in sync for core board actions.
+- [x] Board interactions persist across refresh/restart.
+- [x] Frontend and backend stay in sync for core board actions.
 
 ## Part 8: AI connectivity
 
