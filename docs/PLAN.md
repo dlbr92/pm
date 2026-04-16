@@ -123,22 +123,22 @@ Each part includes implementation steps, tests, and explicit success criteria.
 
 ### Checklist
 
-- [ ] Implement API routes to fetch/update board for authenticated MVP user.
-- [ ] Add request/response models with validation.
-- [ ] Add service/repository layer for DB interactions (simple and clear).
-- [ ] Ensure all updates persist to SQLite JSON field.
+- [x] Implement API routes to fetch/update board for authenticated MVP user.
+- [x] Add request/response models with validation.
+- [x] Add service/repository layer for DB interactions (simple and clear).
+- [x] Ensure all updates persist to SQLite JSON field.
 
 ### Tests
 
-- [ ] Endpoint tests for successful board fetch/update.
-- [ ] Negative tests for invalid payloads.
-- [ ] Persistence tests confirming data survives app restart.
+- [x] Endpoint tests for successful board fetch/update.
+- [x] Negative tests for invalid payloads.
+- [x] Persistence tests confirming data survives app restart.
 
 ### Success criteria
 
-- [ ] Backend API can fully read and update board state.
-- [ ] Validation errors are clear and consistent.
-- [ ] Data persists in SQLite as expected.
+- [x] Backend API can fully read and update board state.
+- [x] Validation errors are clear and consistent.
+- [x] Data persists in SQLite as expected.
 
 ## Part 7: Frontend + backend wiring
 
