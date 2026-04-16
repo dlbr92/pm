@@ -164,40 +164,40 @@ Each part includes implementation steps, tests, and explicit success criteria.
 
 ### Checklist
 
-- [ ] Add backend AI client using `OPENAI_API_KEY`.
-- [ ] Use model `openai/gpt-oss-120b` per project requirements.
-- [ ] Add diagnostic endpoint/task to test AI call with prompt `2+2`.
-- [ ] Add basic timeout/error handling for failed upstream calls.
+- [x] Add backend AI client using `OPENAI_API_KEY`.
+- [x] Use model `openai/gpt-oss-120b` per project requirements.
+- [x] Add diagnostic endpoint/task to test AI call with prompt `2+2`.
+- [x] Add basic timeout/error handling for failed upstream calls.
 
 ### Tests
 
-- [ ] Unit tests with mocked AI client responses.
-- [ ] Optional live connectivity test (enabled only when key exists).
+- [x] Unit tests with mocked AI client responses.
+- [x] Optional live connectivity test (enabled only when key exists).
 
 ### Success criteria
 
-- [ ] Backend can successfully call model and return expected reply for `2+2`.
-- [ ] Failures are handled gracefully with clear errors.
+- [x] Backend can successfully call model and return expected reply for `2+2`.
+- [x] Failures are handled gracefully with clear errors.
 
 ## Part 9: AI structured board updates
 
 ### Checklist
 
-- [ ] Define strict structured output schema for chat response + optional board update.
-- [ ] Send current board JSON + user message + conversation history to model.
-- [ ] Parse/validate model output before applying board changes.
-- [ ] Apply optional board update atomically when present.
+- [x] Define strict structured output schema for chat response + optional board update.
+- [x] Send current board JSON + user message + conversation history to model.
+- [x] Parse/validate model output before applying board changes.
+- [x] Apply optional board update atomically when present.
 
 ### Tests
 
-- [ ] Unit tests for schema validation and parser behavior.
-- [ ] Tests for both response-only and response+board-update cases.
-- [ ] Failure tests for malformed model outputs.
+- [x] Unit tests for schema validation and parser behavior.
+- [x] Tests for both response-only and response+board-update cases.
+- [x] Failure tests for malformed model outputs.
 
 ### Success criteria
 
-- [ ] AI responses are reliably parsed into typed structure.
-- [ ] Valid board updates persist correctly; invalid updates are rejected safely.
+- [x] AI responses are reliably parsed into typed structure.
+- [x] Valid board updates persist correctly; invalid updates are rejected safely.
 
 ## Part 10: AI sidebar UX
 
