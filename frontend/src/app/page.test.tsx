@@ -7,12 +7,13 @@ import { initialData } from "@/lib/kanban";
 const cloneBoard = () => JSON.parse(JSON.stringify(initialData));
 
 const mockFetch = () => {
+  let boardState = cloneBoard();
   const fetchMock = vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
     const method = init?.method ?? "GET";
 
     if (typeof input === "string" && input === "/api/board" && method === "GET") {
       return Promise.resolve(
-        new Response(JSON.stringify(cloneBoard()), {
+        new Response(JSON.stringify(boardState), {
           status: 200,
           headers: { "Content-Type": "application/json" },
         })
@@ -20,11 +21,37 @@ const mockFetch = () => {
     }
 
     if (typeof input === "string" && input === "/api/board" && method === "PUT") {
+      boardState = JSON.parse((init?.body as string) || "{}");
       return Promise.resolve(
-        new Response(init?.body as string, {
+        new Response(JSON.stringify(boardState), {
           status: 200,
           headers: { "Content-Type": "application/json" },
         })
+      );
+    }
+
+    if (typeof input === "string" && input === "/api/ai/chat" && method === "POST") {
+      const body = JSON.parse((init?.body as string) || "{}") as {
+        message?: string;
+      };
+      boardState = {
+        ...boardState,
+        columns: boardState.columns.map((column: { id: string; title: string }) =>
+          column.id === "col-backlog" ? { ...column, title: "AI Updated" } : column
+        ),
+      };
+      return Promise.resolve(
+        new Response(
+          JSON.stringify({
+            reply: body.message ? `AI: ${body.message}` : "AI reply",
+            boardUpdated: true,
+            board: boardState,
+          }),
+          {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+          }
+        )
       );
     }
 
@@ -111,5 +138,22 @@ describe("Home auth flow", () => {
       ([url, init]) => url === "/api/board" && init?.method === "PUT"
     );
     expect(putCalls.length).toBeGreaterThan(0);
+  });
+
+  it("renders AI responses and applies board updates", async () => {
+    render(<Home />);
+
+    await userEvent.type(screen.getByLabelText(/username/i), "user");
+    await userEvent.type(screen.getByLabelText(/password/i), "password");
+    await userEvent.click(screen.getByRole("button", { name: /sign in/i }));
+    expect(
+      await screen.findByRole("heading", { name: /kanban studio/i })
+    ).toBeInTheDocument();
+
+    await userEvent.type(screen.getByLabelText(/ai message/i), "rename backlog");
+    await userEvent.click(screen.getByRole("button", { name: /^send$/i }));
+
+    expect(await screen.findByText("AI: rename backlog")).toBeInTheDocument();
+    expect(await screen.findByDisplayValue("AI Updated")).toBeInTheDocument();
   });
 });

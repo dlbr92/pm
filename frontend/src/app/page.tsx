@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { AIChatSidebar } from "@/components/AIChatSidebar";
 import { KanbanBoard } from "@/components/KanbanBoard";
 import { LoginForm } from "@/components/LoginForm";
+import { sendAIChat, type AIChatHistoryItem } from "@/lib/aiChatApi";
 import { AUTH_STORAGE_KEY, isValidCredentials } from "@/lib/auth";
 import { fetchBoard, saveBoard } from "@/lib/boardApi";
 import type { BoardData } from "@/lib/kanban";
@@ -15,6 +17,9 @@ export default function Home() {
   const [isSaving, setIsSaving] = useState(false);
   const [boardSaveError, setBoardSaveError] = useState<string | null>(null);
   const [boardReloadCount, setBoardReloadCount] = useState(0);
+  const [chatMessages, setChatMessages] = useState<AIChatHistoryItem[]>([]);
+  const [isChatLoading, setIsChatLoading] = useState(false);
+  const [chatError, setChatError] = useState<string | null>(null);
 
   useEffect(() => {
     const existingSession = window.sessionStorage.getItem(AUTH_STORAGE_KEY);
@@ -60,6 +65,9 @@ export default function Home() {
     setBoardLoadError(null);
     setBoardSaveError(null);
     setIsSaving(false);
+    setChatMessages([]);
+    setChatError(null);
+    setIsChatLoading(false);
   };
 
   const handleBoardChange = (nextBoard: BoardData) => {
@@ -76,6 +84,25 @@ export default function Home() {
       .finally(() => {
         setIsSaving(false);
       });
+  };
+
+  const handleSendAIMessage = async (message: string) => {
+    const history = [...chatMessages];
+    setChatMessages((prev) => [...prev, { role: "user", content: message }]);
+    setChatError(null);
+    setIsChatLoading(true);
+    try {
+      const response = await sendAIChat(message, history);
+      setChatMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: response.reply },
+      ]);
+      setBoard(response.board);
+    } catch {
+      setChatError("Unable to get AI response right now.");
+    } finally {
+      setIsChatLoading(false);
+    }
   };
 
   if (!isAuthenticated) {
@@ -116,6 +143,14 @@ export default function Home() {
       onLogout={handleLogout}
       isSaving={isSaving}
       saveError={boardSaveError}
+      sidebar={
+        <AIChatSidebar
+          messages={chatMessages}
+          isLoading={isChatLoading}
+          error={chatError}
+          onSend={handleSendAIMessage}
+        />
+      }
     />
   );
 }

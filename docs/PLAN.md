@@ -203,22 +203,22 @@ Each part includes implementation steps, tests, and explicit success criteria.
 
 ### Checklist
 
-- [ ] Add sidebar chat UI integrated with backend AI endpoint.
-- [ ] Display conversation history and loading/error states.
-- [ ] Apply returned board updates and refresh UI state automatically.
-- [ ] Keep styling aligned with project color scheme.
+- [x] Add sidebar chat UI integrated with backend AI endpoint.
+- [x] Display conversation history and loading/error states.
+- [x] Apply returned board updates and refresh UI state automatically.
+- [x] Keep styling aligned with project color scheme.
 
 ### Tests
 
-- [ ] Component tests for chat interactions and state rendering.
-- [ ] Integration tests for AI response rendering + board update application.
-- [ ] E2E flow where AI modifies board and UI reflects changes immediately.
+- [x] Component tests for chat interactions and state rendering.
+- [x] Integration tests for AI response rendering + board update application.
+- [x] E2E flow where AI modifies board and UI reflects changes immediately.
 
 ### Success criteria
 
-- [ ] User can chat in sidebar without breaking Kanban interactions.
-- [ ] AI-triggered board updates appear in UI automatically.
-- [ ] Core UX remains stable and responsive.
+- [x] User can chat in sidebar without breaking Kanban interactions.
+- [x] AI-triggered board updates appear in UI automatically.
+- [x] Core UX remains stable and responsive.
 
 ## Execution order and gates
 

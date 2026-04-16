@@ -29,6 +29,31 @@ const mockBoardApi = async (page: Page) => {
 
     await route.fulfill({ status: 405 });
   });
+
+  await page.route("**/api/ai/chat", async (route) => {
+    const request = route.request();
+    if (request.method() !== "POST") {
+      await route.fulfill({ status: 405 });
+      return;
+    }
+
+    const body = request.postDataJSON() as { message?: string };
+    board = {
+      ...board,
+      columns: board.columns.map((column) =>
+        column.id === "col-backlog" ? { ...column, title: "AI Backlog" } : column
+      ),
+    };
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        reply: body.message ? `AI handled: ${body.message}` : "AI handled",
+        boardUpdated: true,
+        board,
+      }),
+    });
+  });
 };
 
 const login = async (page: Page) => {
@@ -112,4 +137,18 @@ test("requires login before board is visible", async ({ page }) => {
   await expect(
     page.getByRole("heading", { name: /kanban studio/i })
   ).not.toBeVisible();
+});
+
+test("ai sidebar updates board immediately", async ({ page }) => {
+  await mockBoardApi(page);
+  await page.goto("/");
+  await login(page);
+
+  await page.getByLabel("AI message").fill("rename backlog");
+  await page.getByRole("button", { name: /^send$/i }).click();
+
+  await expect(page.getByText("AI handled: rename backlog")).toBeVisible();
+  await expect(page.locator('input[aria-label="Column title"]').first()).toHaveValue(
+    "AI Backlog"
+  );
 });
