@@ -100,24 +100,24 @@ Each part includes implementation steps, tests, and explicit success criteria.
 
 ### Checklist
 
-- [ ] Define SQLite schema for users + board JSON storage.
-- [ ] Proposed minimal tables:
+- [x] Define SQLite schema for users + board JSON storage.
+- [x] Proposed minimal tables:
   - `users(id, username, created_at)`
   - `boards(id, user_id, board_json, updated_at)`
-- [ ] Add migration/init logic to create DB if missing.
-- [ ] Document schema and rationale in `docs/`.
-- [ ] Request user sign-off on schema documentation.
+- [x] Add migration/init logic to create DB if missing.
+- [x] Document schema and rationale in `docs/`.
+- [x] Request user sign-off on schema documentation.
 
 ### Tests
 
-- [ ] Unit tests for DB init/create-if-missing behavior.
-- [ ] CRUD tests for board JSON read/write by `user_id`.
+- [x] Unit tests for DB init/create-if-missing behavior.
+- [x] CRUD tests for board JSON read/write by `user_id`.
 
 ### Success criteria
 
-- [ ] Fresh startup creates DB and required tables.
-- [ ] Board JSON round-trips without data loss.
-- [ ] Schema documentation approved by user.
+- [x] Fresh startup creates DB and required tables.
+- [x] Board JSON round-trips without data loss.
+- [x] Schema documentation approved by user.
 
 ## Part 6: Backend Kanban API
 

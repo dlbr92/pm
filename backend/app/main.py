@@ -1,7 +1,9 @@
 from pathlib import Path
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
+from app.db import init_db
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 FALLBACK_STATIC_DIR = BASE_DIR / "static"
@@ -12,7 +14,13 @@ WEB_STATIC_DIR = (
     else FALLBACK_STATIC_DIR
 )
 
-app = FastAPI(title="PM MVP Backend")
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    init_db()
+    yield
+
+
+app = FastAPI(title="PM MVP Backend", lifespan=lifespan)
 
 
 @app.get("/api/health")
