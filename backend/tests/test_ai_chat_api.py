@@ -6,7 +6,7 @@ from app.main import app, get_ai_service
 
 
 class FakeAIService:
-    model = "openai/gpt-oss-120b"
+    model = "gpt-4.1-mini"
 
     def __init__(self, model_output: str):
         self.model_output = model_output

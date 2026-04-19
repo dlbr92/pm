@@ -2,7 +2,7 @@ import os
 
 from openai import APIError, APITimeoutError, OpenAI
 
-AI_MODEL = "openai/gpt-oss-120b"
+AI_MODEL = "gpt-4.1-mini"
 AI_DIAGNOSTIC_PROMPT = "2+2"
 
 

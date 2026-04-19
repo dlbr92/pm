@@ -5,7 +5,7 @@ from app.services.ai_service import AIServiceError
 
 
 class FakeAIService:
-    model = "openai/gpt-oss-120b"
+    model = "gpt-4.1-mini"
 
     def __init__(self, response: str | None = None, error: AIServiceError | None = None):
         self._response = response
@@ -29,7 +29,7 @@ def test_ai_diagnostic_success_with_mocked_service() -> None:
     payload = response.json()
     assert payload["prompt"] == "2+2"
     assert payload["response"] == "4"
-    assert payload["model"] == "openai/gpt-oss-120b"
+    assert payload["model"] == "gpt-4.1-mini"
 
 
 def test_ai_diagnostic_maps_timeout_to_504() -> None:
