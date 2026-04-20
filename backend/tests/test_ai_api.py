@@ -1,6 +1,7 @@
 from fastapi.testclient import TestClient
 
-from app.main import app, get_ai_service
+from app.main import app
+from app.routers.ai import get_ai_service
 from app.services.ai_service import AIServiceError
 
 
