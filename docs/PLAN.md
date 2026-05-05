@@ -165,7 +165,7 @@ Each part includes implementation steps, tests, and explicit success criteria.
 ### Checklist
 
 - [x] Add backend AI client using `OPENAI_API_KEY`.
-- [x] Use model `openai/gpt-oss-120b` per project requirements.
+- [x] Use model `gpt-4.1-mini` per project requirements.
 - [x] Add diagnostic endpoint/task to test AI call with prompt `2+2`.
 - [x] Add basic timeout/error handling for failed upstream calls.
 
